@@ -27,7 +27,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static Drive drive = new Drive();
   public static Intake intake = new Intake();
-  public ArcadeDrive arcadeDriveCommand = new ArcadeDrive();
+  public static ArcadeDrive arcadeDriveCommand = new ArcadeDrive();
   public static Joystick stick = new Joystick(OperatorConstants.JOYSTICK_ID);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -48,7 +48,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  
+
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     JoystickButton closeJoystickButton = new JoystickButton(stick, 0); // a 
