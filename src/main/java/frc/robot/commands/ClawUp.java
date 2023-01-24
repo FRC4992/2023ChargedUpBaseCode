@@ -4,16 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Drive;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
-public class ArcadeDrive extends CommandBase {
-  /** Creates a new ArcadeDrive. */
-  public ArcadeDrive() {
+import frc.robot.RobotContainer;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+public class ClawUp extends CommandBase {
+  /** Creates a new ClawUp. */
+  public ClawUp() {
+    addRequirements(RobotContainer.claw);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.drive);
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +23,15 @@ public class ArcadeDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() { // x axis is 0
-    RobotContainer.drive.drive.arcadeDrive(-RobotContainer.stick.getRawAxis(1), -RobotContainer.stick.getRawAxis(0));
+  public void execute() {
+    RobotContainer.claw.ClawUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.claw.stopClaw();
+  }
 
   // Returns true when the command should end.
   @Override

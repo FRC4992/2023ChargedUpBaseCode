@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,6 +21,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private double startTime;
+  AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -45,6 +48,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -71,8 +75,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     double time = Timer.getFPGATimestamp();
 
-    if (time -startTime < 3) {
-      m_robotContainer.drive.drive.arcadeDrive(0.25, 0.0);
+    if (time -startTime < 1) {
+      m_robotContainer.drive.drive.arcadeDrive(0.9, 0.0);
     }
   }
 
@@ -85,11 +89,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.arcadeDriveCommand.execute();
+    double pitchAngleDegrees = ahrs.getPitch();
+    System.out.println(pitchAngleDegrees);
+  }
 
   @Override
   public void testInit() {
@@ -99,7 +108,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    
+    System.out.println(m_robotContainer.drive.drive.isAlive());
+   // m_robotContainer.drive.left.setMo
+   m_robotContainer.drive.left.set(0.5);
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

@@ -7,8 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClawDown;
+import frc.robot.commands.ClawUp;
 import frc.robot.commands.CloseIntake;
 import frc.robot.commands.OpenIntake;
+import frc.robot.subsystems.ClawMotor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
@@ -29,6 +32,7 @@ public class RobotContainer {
   public static Intake intake = new Intake();
   public static ArcadeDrive arcadeDriveCommand = new ArcadeDrive();
   public static Joystick stick = new Joystick(OperatorConstants.JOYSTICK_ID);
+  public static ClawMotor claw = new ClawMotor();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -51,11 +55,17 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    JoystickButton closeJoystickButton = new JoystickButton(stick, 0); // a 
+    JoystickButton closeJoystickButton = new JoystickButton(stick, 1); // a 
     closeJoystickButton.onTrue(new CloseIntake()); 
 
-    JoystickButton openJoystickButton = new JoystickButton(stick, 1); // b
+    JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
     openJoystickButton.onTrue(new OpenIntake());
+
+    JoystickButton clawDownButton = new JoystickButton(stick, 3); //x
+    clawDownButton.onTrue(new ClawDown());
+
+    JoystickButton clawUpButton = new JoystickButton(stick, 4); //y
+    clawUpButton.onTrue(new ClawUp());
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
