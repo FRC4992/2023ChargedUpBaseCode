@@ -6,16 +6,22 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OperatorConstants;
 
 public class Drive extends SubsystemBase {
   /** Creates a new Drive. */
-  public Talon left, right;
+  public WPI_TalonSRX left, right;
   public DifferentialDrive drive;
   public Drive() {
-    left = new Talon(OperatorConstants.LEFT_MOTOR_ID);
-    right = new Talon(OperatorConstants.RIGHT_MOTOR_ID);
+    
+    left = new WPI_TalonSRX(OperatorConstants.LEFT_MOTOR_ID);
+    right = new WPI_TalonSRX(OperatorConstants.RIGHT_MOTOR_ID);
+    right.setInverted(true);
     drive = new DifferentialDrive(left, right);
   }
 
