@@ -1,3 +1,5 @@
 # 2023ChargedUpBaseCode
 
-inital command robot template for 2023 frc charged up robot
+code for 2023 charged up base competition 
+
+implements pneumatics (Kermit) and getting pitch from the NavX sensor (Shelley)
