@@ -11,9 +11,11 @@ import frc.robot.commands.ClawDown;
 import frc.robot.commands.ClawUp;
 import frc.robot.commands.CloseIntake;
 import frc.robot.commands.OpenIntake;
+import frc.robot.commands.SetClaw;
 import frc.robot.subsystems.ClawMotor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -53,7 +55,8 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  private void configureBindings() {
+  private void 
+  () {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     JoystickButton closeJoystickButton = new JoystickButton(stick, 1); // a 
     closeJoystickButton.onTrue(new CloseIntake()); 
@@ -62,10 +65,10 @@ public class RobotContainer {
     openJoystickButton.onTrue(new OpenIntake());
 
     JoystickButton clawDownButton = new JoystickButton(stick, 3); //x
-    clawDownButton.onTrue(new ClawDown());
+    clawDownButton.onTrue(new SetClaw(-Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
 
     JoystickButton clawUpButton = new JoystickButton(stick, 4); //y
-    clawUpButton.onTrue(new ClawUp());
+    clawUpButton.onTrue(new SetClaw(Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
