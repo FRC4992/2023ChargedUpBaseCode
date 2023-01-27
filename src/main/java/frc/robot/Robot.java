@@ -74,10 +74,21 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double time = Timer.getFPGATimestamp();
+    double pitchAngleDegrees = ahrs.getPitch();
 
     if (time -startTime < 1) {
       m_robotContainer.drive.drive.arcadeDrive(0.9, 0.0);
     }
+
+    /* 
+    if (pitchAngleDegrees is within a certain range) {
+      drive forward
+    } 
+
+    if (pitchAngleDegrees is within another range) {
+      drive backwards
+    }
+    */
   }
 
   @Override
@@ -109,10 +120,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    
-    System.out.println(m_robotContainer.drive.drive.isAlive());
    // m_robotContainer.drive.left.setMo
-   m_robotContainer.drive.left.set(0.5);
   }
 
   /** This function is called once when the robot is first started up. */
