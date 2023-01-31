@@ -23,5 +23,5 @@ public final class Constants { // make all caps
     public static final int INTAKE_CLOSE = 1;
   }
   // Speed Constants:
-  public static final double kCLAW_SPEED = 0.5;
+  public static final double kCLAW_SPEED = 0.4;
 }

@@ -5,7 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import com.kauailabs.navx.frc.AHRS;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+//import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,7 +24,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private double startTime;
-  AHRS ahrs = new AHRS(SPI.Port.kMXP);
+  //AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -74,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double time = Timer.getFPGATimestamp();
-    double pitchAngleDegrees = ahrs.getPitch();
+    //double pitchAngleDegrees = ahrs.getPitch();
 
     if (time -startTime < 1) {
       m_robotContainer.drive.drive.arcadeDrive(0.9, 0.0);
@@ -107,8 +110,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.arcadeDriveCommand.execute();
-    double pitchAngleDegrees = ahrs.getPitch();
-    System.out.println(pitchAngleDegrees);
+    //double pitchAngleDegrees = ahrs.getPitch();
+    //System.out.println(pitchAngleDegrees);
   }
 
   @Override
@@ -120,6 +123,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    double ticks = m_robotContainer.claw.claw.getSelectedSensorPosition();
+    System.out.println(m_robotContainer.claw.getCurrentArmAngle());
+    // m_robotContainer.claw.claw.set(ControlMode.Position, m_robotContainer.claw.angleToTicks(45));
    // m_robotContainer.drive.left.setMo
   }
 

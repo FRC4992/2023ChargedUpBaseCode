@@ -55,8 +55,7 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  private void 
-  () {
+  private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     JoystickButton closeJoystickButton = new JoystickButton(stick, 1); // a 
     closeJoystickButton.onTrue(new CloseIntake()); 
