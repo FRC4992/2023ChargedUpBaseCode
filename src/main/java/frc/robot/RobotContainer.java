@@ -34,7 +34,8 @@ public class RobotContainer {
   public static Intake intake = new Intake();
   public static ArcadeDrive arcadeDriveCommand = new ArcadeDrive();
   public static Joystick stick = new Joystick(OperatorConstants.JOYSTICK_ID);
-  public static ClawMotor claw = new ClawMotor();
+  public static Joystick controlPanel = new Joystick(OperatorConstants.CONTROL_PANEL_ID);
+  public static ClawMotor clawArm = new ClawMotor();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -63,11 +64,23 @@ public class RobotContainer {
     JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
     openJoystickButton.onTrue(new OpenIntake());
 
-    JoystickButton clawDownButton = new JoystickButton(stick, 3); //x
+    JoystickButton clawDownButton = new JoystickButton(controlPanel, 9); //x
     clawDownButton.onTrue(new SetClaw(-Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
 
-    JoystickButton clawUpButton = new JoystickButton(stick, 4); //y
+    JoystickButton clawUpButton = new JoystickButton(controlPanel, 7); //y
     clawUpButton.onTrue(new SetClaw(Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
+  
+    JoystickButton topHeightButton = new JoystickButton(controlPanel, 3);
+    // set height of claw to something random with the top black button
+
+    JoystickButton middleHeightButton = new JoystickButton(controlPanel, 14);
+    // set height of claw with second to middle black button
+
+    JoystickButton bottomHeightButton = new JoystickButton(controlPanel, 15);
+    // set height button black button
+
+    JoystickButton startingHeightButton = new JoystickButton(controlPanel, 6);
+    // set height with green button
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

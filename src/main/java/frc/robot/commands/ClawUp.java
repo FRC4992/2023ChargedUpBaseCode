@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ClawUp extends CommandBase {
   /** Creates a new ClawUp. */
   public ClawUp() {
-    addRequirements(RobotContainer.claw);
+    addRequirements(RobotContainer.clawArm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,13 +24,13 @@ public class ClawUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.claw.ClawUp();
+    RobotContainer.clawArm.ClawUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.claw.stopClaw();
+    RobotContainer.clawArm.stopClaw();
   }
 
   // Returns true when the command should end.

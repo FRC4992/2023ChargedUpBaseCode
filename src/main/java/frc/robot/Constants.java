@@ -21,6 +21,11 @@ public final class Constants { // make all caps
     public static final int LEFT_MOTOR_ID = 5;
     public static final int INTAKE_OPEN = 0;
     public static final int INTAKE_CLOSE = 1;
+
+    // Control panel ID
+    public static final int CONTROL_PANEL_ID = 1;
+    
+    
   }
   // Speed Constants:
   public static final double kCLAW_SPEED = 0.4;
