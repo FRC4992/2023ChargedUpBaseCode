@@ -57,10 +57,10 @@ public class ClawMotor extends SubsystemBase {
     
   }
   public void ClawUp (){
-    SetClaw(kCLAW_SPEED);
+    SetClaw(Constants.kCLAW_SPEED);
   }
   public void ClawDown (){
-    SetClaw(-kCLAW_SPEED);
+    SetClaw((Constants.kCLAW_SPEED)*-1);
   }
   public void SetClaw(double speed){
       claw.set(safetyClamp(speed));
