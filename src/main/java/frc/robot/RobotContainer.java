@@ -11,7 +11,7 @@ import frc.robot.commands.ClawDown;
 import frc.robot.commands.ClawUp;
 import frc.robot.commands.CloseIntake;
 import frc.robot.commands.OpenIntake;
-import frc.robot.commands.SetClaw;
+// import frc.robot.commands.SetClaw;
 import frc.robot.subsystems.ClawMotor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -64,11 +64,11 @@ public class RobotContainer {
     JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
     openJoystickButton.onTrue(new OpenIntake());
 
-    JoystickButton clawDownButton = new JoystickButton(controlPanel, 9); //x
-    clawDownButton.onTrue(new SetClaw(-Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
+    // JoystickButton clawDownButton = new JoystickButton(controlPanel, 9); //x
+    // clawDownButton.onTrue(new SetClaw(-Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
 
-    JoystickButton clawUpButton = new JoystickButton(controlPanel, 7); //y
-    clawUpButton.onTrue(new SetClaw(Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
+    // JoystickButton clawUpButton = new JoystickButton(controlPanel, 7); //y
+    // clawUpButton.onTrue(new SetClaw(Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
   
     JoystickButton topHeightButton = new JoystickButton(controlPanel, 3);
     // set height of claw to something random with the top black button

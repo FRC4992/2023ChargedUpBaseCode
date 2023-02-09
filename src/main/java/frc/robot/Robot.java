@@ -13,7 +13,15 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.LimelightHelpers.LimelightTarget_Detector;
 import edu.wpi.first.wpilibj.Timer;
+
+// april tag imports
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -115,9 +123,30 @@ public class Robot extends TimedRobot {
     // System.out.println(pitchAngleDegrees);
     double ticks = m_robotContainer.clawArm.claw.getSelectedSensorPosition();
     double zeroPos = m_robotContainer.clawArm.sensorZeroValue;
-    System.out.println("Raw Ticks: " +  ticks);
-    System.out.println("Zero Pos: " + zeroPos);
-    System.out.println("Computed Angle: " +  m_robotContainer.clawArm.getCurrentArmAngle());
+    // System.out.println("Raw Ticks: " +  ticks);
+    // System.out.println("Zero Pos: " + zeroPos);
+    // System.out.println("Computed Angle: " +  m_robotContainer.clawArm.getCurrentArmAngle());
+
+    // april tag
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+  
+    LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
+    System.out.println(llresults);
+    for (LimelightTarget_Detector result : llresults.targetingResults.targets_Detector) {
+      System.out.println(result.classID);
+    }
+   
+
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area); 
+    // System.out.println(json.getString("{}"));
   }
 
   @Override
