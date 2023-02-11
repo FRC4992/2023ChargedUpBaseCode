@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ArmLevels;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.Autos;
@@ -11,7 +12,7 @@ import frc.robot.commands.ClawDown;
 import frc.robot.commands.ClawUp;
 import frc.robot.commands.CloseIntake;
 import frc.robot.commands.OpenIntake;
-// import frc.robot.commands.SetClaw;
+import frc.robot.commands.SetClaw;
 import frc.robot.subsystems.ClawMotor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -63,23 +64,24 @@ public class RobotContainer {
 
     JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
     openJoystickButton.onTrue(new OpenIntake());
-
-    // JoystickButton clawDownButton = new JoystickButton(controlPanel, 9); //x
-    // clawDownButton.onTrue(new SetClaw(-Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
-
-    // JoystickButton clawUpButton = new JoystickButton(controlPanel, 7); //y
-    // clawUpButton.onTrue(new SetClaw(Constants.kCLAW_SPEED)).onFalse(new SetClaw(0));
   
     JoystickButton topHeightButton = new JoystickButton(controlPanel, 3);
     // set height of claw to something random with the top black button
+    topHeightButton.whileTrue(new SetClaw(ArmLevels.LEVEL3));
 
     JoystickButton middleHeightButton = new JoystickButton(controlPanel, 14);
     // set height of claw with second to middle black button
+    middleHeightButton.whileTrue(new SetClaw(ArmLevels.LEVEL2));
 
     JoystickButton bottomHeightButton = new JoystickButton(controlPanel, 15);
     // set height button black button
+    bottomHeightButton.whileTrue(new SetClaw(ArmLevels.LEVEL1));
 
     JoystickButton startingHeightButton = new JoystickButton(controlPanel, 6);
+    startingHeightButton.whileTrue(new SetClaw(ArmLevels.BOTTOM));
+    
+
+
     // set height with green button
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,

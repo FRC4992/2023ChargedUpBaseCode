@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants.ArmLevels;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -29,13 +30,15 @@ public class ClawMotor extends SubsystemBase {
   //  private static double sensorOffset = 694.0;
 
    private static double kTickToAngleSlope = -0.0122;
-   private static final double kARM_BOTTOM_LIMIT_SWITCH_ANGLE = 6;
+   private static final double kARM_BOTTOM_LIMIT_SWITCH_ANGLE = 22;
    private static final double kARM_TOP_LIMIT_SWITCH_ANGLE = 142;
 
    private static double lastKnownAngle = 6;
    private static double lastKnownTick = 7972;
 
+   private static ArmLevels targetLevel;
 
+   private static boolean isAtTarget;
 
 
 
@@ -46,9 +49,9 @@ public class ClawMotor extends SubsystemBase {
     claw.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
     claw.setSensorPhase(true);
     claw.config_kF(0, 0);
-		claw.config_kP(0, 2);
+		claw.config_kP(0, 1.75);
 		claw.config_kI(0, 0);
-		claw.config_kD(0,0.25);
+		claw.config_kD(0,0.45);
     resetEncoder(kARM_BOTTOM_LIMIT_SWITCH_ANGLE);
     topLimitSwitch = new DigitalInput(0);
     bottomLimitSwitch = new DigitalInput(1);
@@ -57,10 +60,10 @@ public class ClawMotor extends SubsystemBase {
     
   }
   public void ClawUp (){
-    SetClaw(kCLAW_SPEED);
+    SetClaw(Constants.kCLAW_SPEED);
   }
   public void ClawDown (){
-    SetClaw(-kCLAW_SPEED);
+    SetClaw((Constants.kCLAW_SPEED)*-1);
   }
   public void SetClaw(double speed){
       claw.set(safetyClamp(speed));
@@ -75,6 +78,10 @@ public class ClawMotor extends SubsystemBase {
     return (kTickToAngleSlope*(ticks-lastKnownTick))+lastKnownAngle;
 
   }
+  public void setArmLevel(ArmLevels level){
+    targetLevel = level;
+    System.out.println("setting target level to " + level);
+  }
 
   // private double angleToTicks(double angle){
   //   return kSensorSlope * angle + sensorZeroValue;
@@ -86,6 +93,10 @@ public class ClawMotor extends SubsystemBase {
   public void resetEncoder(double knownAngle){
     lastKnownAngle = knownAngle;
     lastKnownTick = claw.getSelectedSensorPosition();
+  }
+  
+  public boolean isAtTarget(){
+    return isAtTarget;
   }
 
   // Given a desired speed, returns a speed that should be sent to the motors based on the state of limit switches
@@ -107,7 +118,6 @@ public class ClawMotor extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println();
     if (bottomLimitSwitch.get()){
       System.out.println("Bottomed Out");
       resetEncoder(kARM_BOTTOM_LIMIT_SWITCH_ANGLE);
@@ -116,17 +126,28 @@ public class ClawMotor extends SubsystemBase {
       System.out.println("Topped Out");
       resetEncoder(kARM_TOP_LIMIT_SWITCH_ANGLE);
     }
-    double setpoint = 73;
-    double computed_speed = pid.calculate(getCurrentArmAngle(), setpoint);
-    double clamped_speed = safetyClamp(computed_speed);
-    if (!pid.atSetpoint()){
-      claw.set(clamped_speed);
-
-    }else{
-      claw.set(0);
+    if (targetLevel == null){
+      //System.out.println("target not set");
+      stopClaw();
+      isAtTarget = true;
     }
-    System.out.println(clamped_speed);
+    else{
+      double setpoint = targetLevel.armAngle();
+      double computed_speed = pid.calculate(getCurrentArmAngle(), setpoint);
+      double clamped_speed = safetyClamp(computed_speed);
+      System.out.println(setpoint);
+      System.out.println(computed_speed);
+      System.out.println(clamped_speed);
+      if (!pid.atSetpoint()){
+        claw.set(clamped_speed);
+        isAtTarget = false;
 
+      }else{
+        claw.set(0);
+        isAtTarget = true;
+      }
+      //System.out.println(clamped_speed);
+   }
     // if (topLimitSwitch.get() || bottom){
     //   stopClaw();
     // }

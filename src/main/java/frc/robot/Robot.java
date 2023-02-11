@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.LimelightHelpers.LimelightTarget_Detector;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants.ArmLevels;
 
 // april tag imports
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -120,24 +121,24 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.arcadeDriveCommand.execute();
     double pitchAngleDegrees = ahrs.getPitch();
-    // System.out.println(pitchAngleDegrees);
     double ticks = m_robotContainer.clawArm.claw.getSelectedSensorPosition();
     double zeroPos = m_robotContainer.clawArm.sensorZeroValue;
-    // System.out.println("Raw Ticks: " +  ticks);
-    // System.out.println("Zero Pos: " + zeroPos);
-    // System.out.println("Computed Angle: " +  m_robotContainer.clawArm.getCurrentArmAngle());
 
     // april tag
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
-  
-    LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
-    System.out.println(llresults);
-    for (LimelightTarget_Detector result : llresults.targetingResults.targets_Detector) {
-      System.out.println(result.classID);
-    }
+
+    
+    // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
+    // System.out.println(llresults);
+    // for (LimelightTarget_Detector result : llresults.targetingResults.targets_Detector) {
+    //   System.out.println(result.classID);
+    // }
+
+    //System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]));
+
    
 
     double x = tx.getDouble(0.0);
@@ -146,7 +147,21 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area); 
-    // System.out.println(json.getString("{}"));
+     // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 0;
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightInches = 24.0;
+
+    // distance from the target to the floor
+    double goalHeightInches = 48.0;
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + y;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+    //calculate distance
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
+    SmartDashboard.putNumber("RobotToTagDist", distanceFromLimelightToGoalInches);  
   }
 
   @Override
@@ -157,10 +172,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-    // m_robotContainer.claw.claw.set(ControlMode.Position, m_robotContainer.claw.angleToTicks(45));
-   // m_robotContainer.drive.left.setMo
-  }
+  public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */
   @Override
