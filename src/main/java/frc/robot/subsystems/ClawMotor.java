@@ -50,8 +50,8 @@ public class ClawMotor extends SubsystemBase {
     claw.setSensorPhase(true);
     claw.config_kF(0, 0);
 		claw.config_kP(0, 1.75);
-		claw.config_kI(0, 0);
-		claw.config_kD(0,0.45);
+		claw.config_kI(0, 0.05);
+		claw.config_kD(0,0.65);
     resetEncoder(kARM_BOTTOM_LIMIT_SWITCH_ANGLE);
     topLimitSwitch = new DigitalInput(0);
     bottomLimitSwitch = new DigitalInput(1);
@@ -60,10 +60,10 @@ public class ClawMotor extends SubsystemBase {
     
   }
   public void ClawUp (){
-    SetClaw(Constants.kCLAW_SPEED);
+    SetClaw(Constants.kCLAW_SPEED_UP);
   }
   public void ClawDown (){
-    SetClaw((Constants.kCLAW_SPEED)*-1);
+    SetClaw((Constants.kCLAW_SPEED_DOWN)*-1);
   }
   public void SetClaw(double speed){
       claw.set(safetyClamp(speed));
@@ -107,11 +107,11 @@ public class ClawMotor extends SubsystemBase {
     if (bottomLimitSwitch.get() && speed < 0){
       return 0;
     }
-    if (speed > Constants.kCLAW_SPEED){
-      return Constants.kCLAW_SPEED;
+    if (speed > Constants.kCLAW_SPEED_UP){
+      return Constants.kCLAW_SPEED_UP;
     }
-    if (speed < -Constants.kCLAW_SPEED){
-      return -Constants.kCLAW_SPEED;
+    if (speed < -Constants.kCLAW_SPEED_DOWN){
+      return -Constants.kCLAW_SPEED_DOWN;
     }
     return speed;
   }
@@ -136,8 +136,8 @@ public class ClawMotor extends SubsystemBase {
       double computed_speed = pid.calculate(getCurrentArmAngle(), setpoint);
       double clamped_speed = safetyClamp(computed_speed);
       System.out.println(setpoint);
-      System.out.println(computed_speed);
-      System.out.println(clamped_speed);
+      System.out.println("computed speed" + computed_speed);
+      System.out.println("clamped speed" + clamped_speed);
       if (!pid.atSetpoint()){
         claw.set(clamped_speed);
         isAtTarget = false;

@@ -28,7 +28,9 @@ public final class Constants { // make all caps
  
   }
   // Speed Constants:
-  public static final double kCLAW_SPEED = 0.4;
+  //public static final double kCLAW_SPEED = 0.4;
+  public static final double kCLAW_SPEED_UP = 0.4;
+  public static final double kCLAW_SPEED_DOWN = 0.2;
  
  
   // Arm levels
@@ -37,10 +39,10 @@ public final class Constants { // make all caps
    * angle = sin^-1(height/length of arm)
    */
   public static enum ArmLevels {
-    BOTTOM(25),
-    LEVEL1(60),
-    LEVEL2(90),
-    LEVEL3(120);
+    BOTTOM(30),
+    LEVEL1(83),
+    LEVEL2(102),
+    LEVEL3(122);
  
     private final double armAngle;
  
