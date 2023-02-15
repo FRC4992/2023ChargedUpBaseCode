@@ -10,10 +10,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.LimelightHelpers.LimelightTarget_Detector;
+import frc.robot.subsystems.ClawMotor;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.ArmLevels;
 
@@ -22,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +41,11 @@ public class Robot extends TimedRobot {
   private double startTime;
   AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
+  public static final String kArmFKey = "ArmF";
+  public static final String kArmPKey = "ArmP";
+  public static final String kArmIKey = "ArmI";
+  public static final String kArmDKey = "ArmD";
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -45,6 +55,27 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    if(!Preferences.containsKey(kArmPKey)){
+
+      Preferences.setDouble(kArmPKey, ClawMotor.armKP);
+
+    }
+    if(!Preferences.containsKey(kArmIKey)){
+
+      Preferences.setDouble(kArmIKey, ClawMotor.armKI);
+
+    }
+    if(!Preferences.containsKey(kArmDKey)){
+
+      Preferences.setDouble(kArmDKey, ClawMotor.armKD);
+
+    }
+    if(!Preferences.containsKey(kArmFKey)){
+
+      Preferences.setDouble(kArmFKey, ClawMotor.armKF);
+
+    }
   }
 
   /**
@@ -114,6 +145,32 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    if(ClawMotor.armKP != Preferences.getDouble(kArmPKey, ClawMotor.armKP)){
+
+      ClawMotor.armKP = Preferences.getDouble(kArmPKey, ClawMotor.armKP);
+      ClawMotor.claw.config_kP(0,ClawMotor.armKP);
+
+    }
+    if(ClawMotor.armKI != Preferences.getDouble(kArmIKey, ClawMotor.armKI)){
+
+      ClawMotor.armKI = Preferences.getDouble(kArmIKey, ClawMotor.armKI);
+      ClawMotor.claw.config_kI(0,ClawMotor.armKI);
+
+    }
+    if(ClawMotor.armKD != Preferences.getDouble(kArmDKey, ClawMotor.armKD)){
+
+      ClawMotor.armKD = Preferences.getDouble(kArmDKey, ClawMotor.armKD);
+      ClawMotor.claw.config_kD(0,ClawMotor.armKD);
+
+    }
+    if(ClawMotor.armKF != Preferences.getDouble(kArmFKey, ClawMotor.armKF)){
+
+      ClawMotor.armKF = Preferences.getDouble(kArmFKey, ClawMotor.armKF);
+      ClawMotor.claw.config_kF(0,ClawMotor.armKF);
+
+    }
+
+
   }
 
   /** This function is called periodically during operator control. */
@@ -129,15 +186,6 @@ public class Robot extends TimedRobot {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
-
-    
-    // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
-    // System.out.println(llresults);
-    // for (LimelightTarget_Detector result : llresults.targetingResults.targets_Detector) {
-    //   System.out.println(result.classID);
-    // }
-
-    //System.out.println(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]));
 
    
 
@@ -161,7 +209,12 @@ public class Robot extends TimedRobot {
 
     //calculate distance
     double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
-    SmartDashboard.putNumber("RobotToTagDist", distanceFromLimelightToGoalInches);  
+    SmartDashboard.putNumber("RobotToTagDist", distanceFromLimelightToGoalInches); 
+    
+    System.out.println(ClawMotor.armKP);
+    System.out.println(ClawMotor.armKI);
+    System.out.println(ClawMotor.armKD);
+    System.out.println(ClawMotor.armKF);
   }
 
   @Override

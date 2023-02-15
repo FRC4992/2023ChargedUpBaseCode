@@ -11,17 +11,20 @@ import frc.robot.RobotContainer;
 
 import javax.management.OperationsException;
 
+import org.opencv.core.Mat;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClawMotor extends SubsystemBase {
   /** Creates a new ClawMotor. */
-    public final WPI_TalonSRX claw;
+    public static WPI_TalonSRX claw;
     public final DigitalInput topLimitSwitch;
     public final DigitalInput bottomLimitSwitch;
     public final PIDController pid;
@@ -44,19 +47,26 @@ public class ClawMotor extends SubsystemBase {
 
    public static double sensorZeroValue = 0;
 
+   public static double armKF = 0;
+   public static double armKP = 1.75;
+   public static double armKI = 0.05;
+   public static double armKD = 0.75;
+
   public ClawMotor() {
     claw = new WPI_TalonSRX(OperatorConstants.CLAW_MOTOR_ID);
     claw.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
     claw.setSensorPhase(true);
-    claw.config_kF(0, 0);
-		claw.config_kP(0, 1.75);
-		claw.config_kI(0, 0.05);
-		claw.config_kD(0,0.65);
+    claw.config_kF(0, armKF);
+		claw.config_kP(0, armKP);
+		claw.config_kI(0, armKI);
+		claw.config_kD(0,armKD);
     resetEncoder(kARM_BOTTOM_LIMIT_SWITCH_ANGLE);
     topLimitSwitch = new DigitalInput(0);
     bottomLimitSwitch = new DigitalInput(1);
-    pid = new PIDController(0.04, 0, 0.005);
+    pid = new PIDController(0.03, 0, 0.006);
     pid.setTolerance(3.0);
+
+
     
   }
   public void ClawUp (){
@@ -112,6 +122,9 @@ public class ClawMotor extends SubsystemBase {
     }
     if (speed < -Constants.kCLAW_SPEED_DOWN){
       return -Constants.kCLAW_SPEED_DOWN;
+    }
+    if (Math.abs(speed) < 0.05){
+      return 0;
     }
     return speed;
   }
