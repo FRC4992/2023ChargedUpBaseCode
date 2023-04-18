@@ -11,9 +11,11 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ClawDown;
 import frc.robot.commands.ClawUp;
 import frc.robot.commands.CloseIntake;
-
+import frc.robot.commands.ExtendArm;
 import frc.robot.commands.OpenIntake;
+import frc.robot.commands.RetractArm;
 import frc.robot.commands.SetClaw;
+import frc.robot.subsystems.ArmMotor;
 import frc.robot.subsystems.ClawMotor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -38,8 +40,9 @@ public class RobotContainer {
   public static Joystick stick = new Joystick(OperatorConstants.JOYSTICK_ID);
   public static Joystick controlPanel = new Joystick(OperatorConstants.CONTROL_PANEL_ID);
   public static ClawMotor clawArm = new ClawMotor();
+  public static ArmMotor teleArm = new ArmMotor();
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  public final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -60,12 +63,24 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    JoystickButton closeJoystickButton = new JoystickButton(stick, 1); // a 
-    closeJoystickButton.onTrue(new CloseIntake()); 
+    // JoystickButton closeJoystickButton = new JoystickButton(stick, 1); // a 
+    // closeJoystickButton.onTrue(new CloseIntake()); 
 
-    JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
-    openJoystickButton.onTrue(new OpenIntake());
-  
+    // JoystickButton openJoystickButton = new JoystickButton(stick, 2); // b
+    // openJoystickButton.onTrue(new OpenIntake());
+
+    m_driverController.leftBumper().onTrue(new OpenIntake());
+    m_driverController.rightBumper().onTrue(new CloseIntake());
+
+    m_driverController.b().onTrue(new SetClaw(Constants.ArmLevels.BOTTOM));
+    m_driverController.a().onTrue(new SetClaw(Constants.ArmLevels.LEVEL1));
+    m_driverController.x().onTrue(new SetClaw(Constants.ArmLevels.LEVEL2));
+    m_driverController.y().onTrue(new SetClaw(Constants.ArmLevels.LEVEL3));
+
+    m_driverController.povUp().onTrue(new ExtendArm());
+    m_driverController.povDown().onTrue(new RetractArm());
+
+
     JoystickButton topHeightButton = new JoystickButton(controlPanel, 3);
     // set height of claw to something random with the top black button
     topHeightButton.whileTrue(new SetClaw(ArmLevels.LEVEL3));

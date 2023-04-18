@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
-import com.kauailabs.navx.frc.AHRS;
+// import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
@@ -39,8 +41,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private double startTime;
-  AHRS ahrs = new AHRS(SPI.Port.kMXP);
-
+ 
   public static final String kArmFKey = "ArmF";
   public static final String kArmPKey = "ArmP";
   public static final String kArmIKey = "ArmI";
@@ -177,7 +178,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.arcadeDriveCommand.execute();
-    double pitchAngleDegrees = ahrs.getPitch();
+    // double pitchAngleDegrees = ahrs.getPitch();
     double ticks = m_robotContainer.clawArm.claw.getSelectedSensorPosition();
     double zeroPos = m_robotContainer.clawArm.sensorZeroValue;
 
@@ -202,7 +203,7 @@ public class Robot extends TimedRobot {
     double limelightLensHeightInches = 24.0;
 
     // distance from the target to the floor
-    double goalHeightInches = 48.0;
+    double goalHeightInches = 18.0;
 
     double angleToGoalDegrees = limelightMountAngleDegrees + y;
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
@@ -215,6 +216,14 @@ public class Robot extends TimedRobot {
     System.out.println(ClawMotor.armKI);
     System.out.println(ClawMotor.armKD);
     System.out.println(ClawMotor.armKF);
+
+    double trigger_val = -m_robotContainer.m_driverController.getLeftTriggerAxis()*10;
+    trigger_val += m_robotContainer.m_driverController.getRightTriggerAxis()*10;
+
+    System.out.println("Trigger_val:"+trigger_val);
+
+     RobotContainer.clawArm.SetClaw(trigger_val);
+
   }
 
   @Override

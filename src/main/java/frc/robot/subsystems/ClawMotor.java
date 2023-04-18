@@ -22,9 +22,13 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public class ClawMotor extends SubsystemBase {
   /** Creates a new ClawMotor. */
     public static WPI_TalonSRX claw;
+
     public final DigitalInput topLimitSwitch;
     public final DigitalInput bottomLimitSwitch;
     public final PIDController pid;
@@ -65,8 +69,6 @@ public class ClawMotor extends SubsystemBase {
     bottomLimitSwitch = new DigitalInput(1);
     pid = new PIDController(0.03, 0, 0.006);
     pid.setTolerance(3.0);
-
-
     
   }
   public void ClawUp (){
@@ -81,6 +83,9 @@ public class ClawMotor extends SubsystemBase {
   public void stopClaw(){
     claw.stopMotor();
   }
+  
+  
+
   private double ticksToAngle(double ticks){
     // kSensorSlope = ticks / deg
     // 1 / kSensorSlope = deg / tick
@@ -131,6 +136,7 @@ public class ClawMotor extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println("Angle :"+getCurrentArmAngle());
     if (bottomLimitSwitch.get()){
       System.out.println("Bottomed Out");
       resetEncoder(kARM_BOTTOM_LIMIT_SWITCH_ANGLE);

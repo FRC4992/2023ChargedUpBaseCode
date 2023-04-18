@@ -13,17 +13,22 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OperatorConstants;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public class Drive extends SubsystemBase {
   /** Creates a new Drive. */
   public WPI_TalonSRX left, right;
+  //public CANSparkMax testMotor;
   public DifferentialDrive drive;
   public Drive() {
-    
     left = new WPI_TalonSRX(OperatorConstants.LEFT_MOTOR_ID);
     right = new WPI_TalonSRX(OperatorConstants.RIGHT_MOTOR_ID);
     right.setInverted(true);
     drive = new DifferentialDrive(left, right);
+    //testMotor = new CANSparkMax(OperatorConstants.SPARK_MOTOR_ID , MotorType.kBrushless);
   }
+
 
   @Override
   public void periodic() {

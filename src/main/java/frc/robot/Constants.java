@@ -21,6 +21,7 @@ public final class Constants { // make all caps
     public static final int LEFT_MOTOR_ID = 5;
     public static final int INTAKE_OPEN = 0;
     public static final int INTAKE_CLOSE = 1;
+    public static final int ARM_MOTOR_ID = 6;
  
     // Control panel ID
     public static final int CONTROL_PANEL_ID = 1;
@@ -32,7 +33,8 @@ public final class Constants { // make all caps
   public static final double kCLAW_SPEED_UP = 0.4;
   public static final double kCLAW_SPEED_DOWN = 0.2;
  
- 
+  public static final double kARM_SPEED_OUT = 0.4;
+  public static final double kARM_SPEED_IN = 0.4;
   // Arm levels
   // To-do : Add actual angle values
   /* 
