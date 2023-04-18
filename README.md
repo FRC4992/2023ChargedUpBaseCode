@@ -1,5 +1,5 @@
 # 2023ChargedUpBaseCode
 
-code for 2023 charged up base competition 
+code for practice robot (wooden Kermit) 2023 season
 
-implements pneumatics (Kermit) and getting pitch from the NavX sensor (Shelley)
+has code for moving arm up/down and opening/closing gripper
